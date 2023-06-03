@@ -1,5 +1,5 @@
 class Character():
-    def __init__(self, name, HP=2, DEF=2, ATK=2):
+    def __init__(self, name, HP=2, DEF=2, ATK=5):
         self.name = name
         self.HP = HP
         self.DEF = DEF
@@ -9,7 +9,16 @@ class Character():
         self.HP += any_heal
 
     def damageTaken(self, any_damage):
-        self.HP -= any_damage - self.DEF
+        if (any_damage - self.DEF) > 0:
+            self.HP -= (any_damage - self.DEF)
+        else:
+            self.HP = self.HP
+        
+    def dealDamage(self, enemy):
+        if (self.ATK - enemy.DEF) > 0:
+            enemy.HP -= (self.ATK - enemy.DEF)
+        else:
+            enemy.HP = enemy.HP
 
     def showStats(self):
         print(self.name + '\'s stats: ')
@@ -50,9 +59,19 @@ while len(name_input) == 0 or not len(name_input) < 10:
 #Mercenary(Strong)
 #Hunter(Ranged)
 
-player_character = Character(name_input)
+#Enemy idea
+"""player_character = Character(name_input)
 
-inputs = [1, 2, 3]
+
+goblin = Character('goblin',3,3,3)
+
+goblin.showStats()
+player_character.dealDamage(goblin)
+
+print('You attack a goblin. His HP is now ' + str(goblin.HP))"""
+
+
+"""inputs = [1, 2, 3]
 
 first_input = 0
 while first_input not in inputs:
@@ -83,6 +102,4 @@ while two_input not in inputs:
         break
     elif two_input == '3':
         print('Exiting now...')
-        quit()
-
-        
+        quit() """
