@@ -1,0 +1,84 @@
+class Character():
+    def __init__(self, name, HP=2, DEF=2, ATK=2):
+        self.name = name
+        self.HP = HP
+        self.DEF = DEF
+        self.ATK = ATK
+
+    def healUp(self, any_heal):
+        self.HP += any_heal
+
+    def damageTaken(self, any_damage):
+        self.HP -= any_damage - self.DEF
+
+    def showStats(self):
+        print(self.name + '\'s stats: ')
+        print("HP: " + str(self.HP))
+        print("DEF: " + str(self.DEF))
+        print("ATK: " + str(self.ATK))
+        
+def printTitle():
+    print('  _____ _          ____            _ _____          _     ____ _                    ____                ')
+    print(' |_   _| |__   ___| __ )  __ _  __| |__  /___  _ __| | __/ ___| | ___  _ __   ___  / ___|___  _ __ ___  ')
+    print('   | | | \'_ \ / _ \  _ \ / _` |/ _` | / // _ \| \'__| |/ / |   | |/ _ \| \'_ \ / _ \| |   / _ \| \'_ ` _ \ ')
+    print('   | | | | | |  __/ |_) | (_| | (_| |/ /| (_) | |  |   <| |___| | (_) | | | |  __/| |__| (_) | | | | | |')
+    print('   |_| |_| |_|\___|____/ \__,_|\__,_/____\___/|_|  |_|\_\\____|_|\___/|_| |_|\___(_)____\___/|_| |_| |_|')
+
+printTitle()
+
+startCriteria = input('Start TheBadZorkClone.com?')
+while startCriteria.capitalize() != 'Yes':
+    startCriteria = input('Start TheBadZorkClone.com?')
+    
+
+name_input = input('\nEnter your character\'s name! You have a maximum of 10 characters.').strip()
+
+while len(name_input) == 0 or not len(name_input) < 10:
+    name_input = input('Your character\'s name has to be something and has to be 10 characters or less! Try again: \n')
+
+#print('Select your class!')
+#Knight(Tank - Health/Defense) -> Armored Knight
+#Mage(Magic - Utility/Range) -> Great Mage
+#Warrior(Range - Damage/Armor Penetration) -> Weapons Saint
+
+#Enemies:
+#Thief(Attacks First)
+#Mercenary(Strong)
+#Hunter(Ranged)
+
+player_character = Character(name_input)
+
+inputs = [1, 2, 3]
+
+first_input = 0
+while first_input not in inputs:
+    first_input = input('What would you like to do? \n (1)Show Stats (2)Begin Adventure (3)Exit Game')
+    
+    if first_input == '1':
+        player_character.showStats()
+        first_input = 0
+        continue
+    elif first_input == '2':
+        print('Away you go, then!')
+        break
+    elif first_input == '3':
+        print('Exiting now...')
+        quit()
+
+two_input = 0
+print('You observe a dark wall of trees before you. Ahead is the Wicked Woods. Do you dare enter?')
+while two_input not in inputs:
+    two_input = input('What would you like to do? \n (1)Show Stats (2)Enter (3)Exit Game')
+    
+    if two_input == '1':
+        player_character.showStats()
+        two_input = 0
+        continue
+    elif two_input == '2':
+        print('You die upon entering the woods.')
+        break
+    elif two_input == '3':
+        print('Exiting now...')
+        quit()
+
+        
