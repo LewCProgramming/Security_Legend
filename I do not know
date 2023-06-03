@@ -27,9 +27,13 @@ def printTitle():
 printTitle()
 
 startCriteria = input('Start TheBadZorkClone.com?')
-while startCriteria.capitalize() != 'Yes':
-    startCriteria = input('Start TheBadZorkClone.com?')
+if startCriteria.capitalize().strip() == 'No':
+    quit()
     
+while startCriteria.capitalize().strip() != 'Yes':
+    startCriteria = input('Start TheBadZorkClone.com?')
+    if startCriteria.capitalize().strip() == 'No':
+        quit()
 
 name_input = input('\nEnter your character\'s name! You have a maximum of 10 characters.').strip()
 
