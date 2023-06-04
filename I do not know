@@ -1,5 +1,5 @@
 class Character():
-    def __init__(self, name, HP=2, DEF=2, ATK=5):
+    def __init__(self, name='', HP=2, DEF=2, ATK=5):
         self.name = name
         self.HP = HP
         self.DEF = DEF
@@ -59,19 +59,12 @@ while len(name_input) == 0 or not len(name_input) < 10:
 #Mercenary(Strong)
 #Hunter(Ranged)
 
-#Enemy idea
-"""player_character = Character(name_input)
 
+player_character = Character(name_input)
 
-goblin = Character('goblin',3,3,3)
+goblin = Character('Goblin Goon',2,2,3)
 
-goblin.showStats()
-player_character.dealDamage(goblin)
-
-print('You attack a goblin. His HP is now ' + str(goblin.HP))"""
-
-
-"""inputs = [1, 2, 3]
+inputs = [1, 2, 3]
 
 first_input = 0
 while first_input not in inputs:
@@ -98,8 +91,49 @@ while two_input not in inputs:
         two_input = 0
         continue
     elif two_input == '2':
-        print('You die upon entering the woods.')
+        print('Very well! You enter the woods...')
         break
     elif two_input == '3':
         print('Exiting now...')
-        quit() """
+        quit() 
+        
+print('OH MOTHER OF LORD! I mean... a monster appears before you. What shall you do?')
+goblin.showStats
+
+three_input = 0
+while three_input not in inputs:
+    three_input = input('What would you like to do? \n (1)Show Stats (2)Fight (3)Flee')
+    
+    if three_input == '1':
+        player_character.showStats()
+        three_input = 0
+        continue
+    elif three_input == '2':
+        print('Very well! You choose to fight.')
+        print('Enemy before you: ')
+        goblin.showStats()
+        break
+    elif three_input == '3':
+        print('You flee out of the forest. How pitiful. No more exploration for you, then. Game over.')
+        quit() 
+        
+four_input = 0
+while four_input not in inputs:
+    four_input = input('What would you like to do? \n (1)Show Stats (2)Attack (3)Flee')
+    
+    if four_input == '1':
+        player_character.showStats()
+        four_input = 0
+        continue
+    elif four_input == '2':
+        print('You attack the bastard Goblin! The Goblin Goon strikes back!')
+        player_character.dealDamage(goblin)
+        goblin.dealDamage(player_character)
+        player_character.showStats()
+        goblin.showStats()
+        if goblin.HP <= 0:
+            print('The Goblin has been slain!')
+        break
+    elif four_input == '3':
+        print('You flee from the goblin and run into a bear trap. The monster finds you and eats you. Game over.')
+        quit() 
