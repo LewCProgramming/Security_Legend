@@ -1,18 +1,18 @@
 class Character():
-    def __init__(self, name='', HP=2, DEF=2, ATK=5):
+    def __init__(self, name, HP, ATK, DODGE, CRIT):
         self.name = name
         self.HP = HP
-        self.DEF = DEF
         self.ATK = ATK
+        self.DODGE = DODGE
+        self.CRIT = CRIT
 
     def healUp(self, any_heal):
         self.HP += any_heal
 
-    def damageTaken(self, any_damage):
-        if (any_damage - self.DEF) > 0:
-            self.HP -= (any_damage - self.DEF)
-        else:
-            self.HP = self.HP
+    def takeDamage(self, any_damage):
+        self.HP -= any_damage
+        print(f'{self.name} the {character_class} took' + str(any_damage) + ' points of damage!\n')
+        print(f'{self.name}\'s HP is now ' + str(self.HP))
         
     def dealDamage(self, enemy):
         if (self.ATK - enemy.DEF) > 0:
@@ -26,8 +26,13 @@ class Character():
         print("DEF: " + str(self.DEF))
         print("ATK: " + str(self.ATK))
 
-def askPrompt(prompt):
-    answers = ['Stats', 'Help', 'Quit', 'Fight', 'Flee', 'Explore','Consume', 'Cancel']
+def multiChoice(choice):
+    answers = ['1', '2', '3', 'Help', 'Stats', 'Quit']
+    #if 1, assign marker = 71 or whatever
+    #key to next event
+
+def battlePrompt(prompt):
+    answers = ['Help', 'Stats', 'Quit', 'Fight', 'First Aid', 'Evade']
     prompt_answer = input(prompt + '\n')
     while prompt_answer.capitalize() not in answers:
         print('Invalid response. Type \'help\' for valid responses.')
@@ -62,7 +67,7 @@ def askPromptBool(bool_prompt):
     if bool_prompt_answer == 'yes':
        print('You answered yes.')
     elif bool_prompt_answer == 'no':
-       print ('You answered no.'')  
+       print ('You answered no.')  
         
 def printTitle():
     print('  _____ _          ____            _ _____          _     ____ _                    ____                ')
