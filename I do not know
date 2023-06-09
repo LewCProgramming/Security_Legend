@@ -1,62 +1,87 @@
+import random
+
 class Character():
-    def __init__(self, name, HP, ATK, DODGE, CRIT):
+    def __init__(self, name, HP = 6, ATK = 3, DODGE = 10, CRIT = 1):
         self.name = name
         self.HP = HP
         self.ATK = ATK
         self.DODGE = DODGE
         self.CRIT = CRIT
-
+    
     def healUp(self, any_heal):
         self.HP += any_heal
 
-    def takeDamage(self, any_damage):
-        self.HP -= any_damage
-        print(f'{self.name} the {character_class} took' + str(any_damage) + ' points of damage!\n')
-        print(f'{self.name}\'s HP is now ' + str(self.HP))
+    def takeDamage(self, attacking_enemy):
+        print(f'The {attacking_enemy.name} attacks!')
+        if self.DODGE >= random.randint(0,100):
+            print('The enemy missed!')
+        else:
+            self.HP -= attacking_enemy.ATK
+            #print(f'{self.name} the {character_class} took' + str(attacking_enemy.ATK) + ' points of damage!\n')
+        if self.HP > 0:
+            print(f'{self.name}\'s HP is now ' + str(self.HP))
+        else:
+            print('Game Over')
+            quit()
         
     def dealDamage(self, enemy):
-        if (self.ATK - enemy.DEF) > 0:
-            enemy.HP -= (self.ATK - enemy.DEF)
+        print(f'You chose to attack the {enemy.name}!')
+        if enemy.DODGE >= random.randint(0,100):
+            print(f'The {enemy.name} dodged! You dealt no damage!')
         else:
-            enemy.HP = enemy.HP
+            print(f'You hit the {enemy.name}!')
+            if self.CRIT >= random.randint(0,100):
+                enemy.HP -= (self.ATK)*3
+                print('Critical hit! You dealt ' + str((self.ATK)*3) + 'points of damage!')
+            else:
+                enemy.HP -= self.ATK
+            
+            if enemy.HP > 0:
+                print('The enemy\'s remaining health is: ' + str(enemy.HP))
+            else:
+                print ('The enemy has been defeated!')
 
     def showStats(self):
         print(self.name + '\'s stats: ')
         print("HP: " + str(self.HP))
-        print("DEF: " + str(self.DEF))
         print("ATK: " + str(self.ATK))
 
-def multiChoice(choice):
-    answers = ['1', '2', '3', 'Help', 'Stats', 'Quit']
+
+def multiChoice(choices_prompt):
+    answers = ['Help', 'Stats', 'Quit', '1', '2', '3']
+    prompt_answer = input(choices_prompt + '\n')
+    while prompt_answer.capitalize() not in answers:
+        print('Invalid response. Type \'help\' for valid responses.')
+        prompt_answer = input(choices_prompt + '\n')
+    if prompt_answer.lower() == 'help':
+        print('Valid responses are: ' + ' '.join(answers))
+    elif prompt_answer.lower() == 'stats':
+        player_character.showStats()
+    elif prompt_answer.lower() == 'quit':
+        print('Exiting Game...')
+        quit()
+    elif prompt_answer == '1':
+        return 1
+    elif prompt_answer == '2':
+        return 2
+    elif prompt_answer == '3':
+        return 3
     #if 1, assign marker = 71 or whatever
     #key to next event
 
-def battlePrompt(prompt):
+def battlePrompt(fight_prompt):
     answers = ['Help', 'Stats', 'Quit', 'Fight', 'First Aid', 'Evade']
-    prompt_answer = input(prompt + '\n')
+    prompt_answer = input(fight_prompt + '\n')
     while prompt_answer.capitalize() not in answers:
         print('Invalid response. Type \'help\' for valid responses.')
-        prompt_answer = input(prompt + '\n')
-    if prompt_answer.lower() == 'stats':
-        player_character.showStats()
-    elif prompt_answer.lower() == 'help':
+        prompt_answer = input(fight_prompt + '\n')
+    if prompt_answer.lower() == 'help':
         print('Valid responses are: ' + ' '.join(answers))
+    elif prompt_answer.lower() == 'stats':
+        player_character.showStats()
     elif prompt_answer.lower() == 'quit':
-        print('Exiting TheBadZorkClone.com')
+        print('Exiting Game...')
         quit()
-    elif prompt_answer.lower() == 'fight':
-        print('Entering fighting mode!')
-    elif prompt_answer.lower() == 'flee':
-        print('You wimp. Fine, flee then...')
-    elif prompt_answer.lower() == 'consume':
-        if fruit > 0:
-            print('You consume a fruit.')
-            player_character.HP += 2
-            fruit -= 1
-        else:
-            print('You have no fruit to consume.')
-    #elif prompt_answer.lower() == 'cancel':
-        #exit or reverse action
     
 def askPromptBool(bool_prompt):
     bool_answers = ['Yes', 'No']
@@ -64,26 +89,29 @@ def askPromptBool(bool_prompt):
     while bool_prompt_answer.capitalize() not in bool_answers:
         print('Invalid response. Please answer \'Yes\' or \'No\'.')
         bool_prompt_answer = input(bool_prompt)
-    if bool_prompt_answer == 'yes':
-       print('You answered yes.')
-    elif bool_prompt_answer == 'no':
-       print ('You answered no.')  
+    if bool_prompt_answer.lower() == 'yes':
+       return True
+    elif bool_prompt_answer.lower() == 'no':
+       return False  
         
 def printTitle():
-    print('  _____ _          ____            _ _____          _     ____ _                    ____                ')
-    print(' |_   _| |__   ___| __ )  __ _  __| |__  /___  _ __| | __/ ___| | ___  _ __   ___  / ___|___  _ __ ___  ')
-    print('   | | | \'_ \ / _ \  _ \ / _` |/ _` | / // _ \| \'__| |/ / |   | |/ _ \| \'_ \ / _ \| |   / _ \| \'_ ` _ \ ')
-    print('   | | | | | |  __/ |_) | (_| | (_| |/ /| (_) | |  |   <| |___| | (_) | | | |  __/| |__| (_) | | | | | |')
-    print('   |_| |_| |_|\___|____/ \__,_|\__,_/____\___/|_|  |_|\_\\____ |_|\___/|_| |_|\___(_)____\___/|_| |_| |_|')
+    print('   _____                      _ _           _                               _ ')
+    print('  / ____|                    (_) |         | |                             | |')
+    print(' | (___   ___  ___ _   _ _ __ _| |_ _   _  | |     ___  __ _  ___ _ __   __| |')
+    print('  \___ \ / _ \/ __| | | | \'__| | __| | | | | |    / _ \/ _` |/ _ \ \'_ \ / _` |')
+    print('  ____) |  __/ (__| |_| | |  | | |_| |_| | | |___|  __/ (_| |  __/ | | | (_| |')
+    print(' |_____/ \___|\___|\__,_|_|  |_|\__|\__, | |______\___|\__, |\___|_| |_|\__,_|')
+    print('                                     __/ |              __/ |                 ')
+    print('                                    |___/              |___/                  ')
 
 printTitle()
 
-startCriteria = input('Start TheBadZorkClone.com?')
+startCriteria = input('Start Security Legend?')
 if startCriteria.capitalize().strip() == 'No':
     quit()
     
 while startCriteria.capitalize().strip() != 'Yes':
-    startCriteria = input('Start TheBadZorkClone.com?')
+    startCriteria = input('Start Security Legend?')
     if startCriteria.capitalize().strip() == 'No':
         quit()
 
@@ -105,11 +133,9 @@ while len(name_input) == 0 or not len(name_input) < 10:
 
 player_character = Character(name_input)
 
-askPrompt('What do you want to do?')
-"""
-goblin = Character('Goblin Goon',2,2,3)
+#askPrompt('What do you want to do?')
 
-inputs = [1, 2, 3]
+"""inputs = [1, 2, 3]
 
 first_input = 0
 while first_input not in inputs:
