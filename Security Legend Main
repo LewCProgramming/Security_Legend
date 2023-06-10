@@ -40,8 +40,10 @@ class Character():
                 enemy.HP -= (self.ATK)*3
                 print('Critical hit! You dealt ' + str((self.ATK)*3) + ' points of damage!')
                 time.sleep(1)
+                return 1
             else:
                 enemy.HP -= self.ATK
+                return 1
             
             if enemy.HP > 0:
                 print('The enemy\'s remaining health is: ' + str(enemy.HP))
@@ -120,7 +122,7 @@ def askPromptBool(bool_prompt):
        
 def battle_sequence(enemy_name):
     while enemy_name.HP > 0:
-        print(f'You are in battle with a(n) {enemy_name.name}!\n')
+        print(f'You are in battle with {enemy_name.name}!\n')
         enemy_name.showStats()
         battle_1 = battlePrompt('What do you want to do?\n')
         if battle_1 == 'fight':
@@ -138,22 +140,23 @@ def battle_sequence(enemy_name):
             print('You evade your enemy\'s attack!\n')
             time.sleep(1)
             
-def battle_sequence_lifesteal(enemy_name):
+def battle_sequence_lifesteal(enemy_name, lifesteal_value):
     while enemy_name.HP > 0:
-        print(f'You are in battle with a(n) {enemy_name.name}!\n')
+        print(f'You are in battle with {enemy_name.name}!\n')
         enemy_name.showStats()
         battle_1 = battlePrompt('What do you want to do?\n')
         if battle_1 == 'fight':
-            player_character.dealDamage(enemy_name)
+            fight = player_character.dealDamage(enemy_name)
+            print(f'You try to steal some of the {enemy_name.name}\'s life force!')
+            if fight == 1:
+                if player_character.HP <= (player_character.Max_HP - 2):
+                    player_character.HP += lifesteal_value
+                    print(f'You gain {lifesteal_value} points of HP!')
+                else:
+                    print('You have too much life force. You are unable to steal any.')
             if enemy_name.HP > 0:
                 player_character.takeDamage(enemy_name)
                 time.sleep(1)
-                print(f'You try to steal some of the {enemy_name.name}\'s life force!')
-                if player_character.HP <= (player_character.Max_HP - 2):
-                    player_character.HP += 2
-                    print('You gain 2 points of HP!')
-                else:
-                    print('You have too much life force. You are unable to steal any.')
         elif battle_1 == 'aid':
             if player_character.HP < player_character.Max_HP:
                 player_character.healUp(3)
@@ -199,6 +202,8 @@ print('\nAs a security guard for The Advanced Security Group, you are tasked wit
 time.sleep(1)
 print('\nYou begin your evening shift guarding Mighty Shop at 3:00 PM, or 1500 hours like your manager says. You punch in, get your gear on, and try to figure out how to start your day.')
 
+#first act
+
 time.sleep(1)
 while True:
     story_route = multiChoice('Do you take some initiative and \n(1)Go on patrol or\n(2)stay and monitor the cameras for a little bit?')
@@ -214,6 +219,9 @@ while True:
         print('Invalid answer for this question.')
         continue
 
+#second act
+
+time.sleep(2)
 if story_route == 'Patrol':
     print('He has a baseball bat. Duty calls! You feel no other response would be appropriate.')
     thief = Character('Thief',5,5,2,10,1)
@@ -240,6 +248,8 @@ if story_route == 'Dock Fight':
     player_character.showStats()
     story_route = 'Split'
 
+#third act
+
 if story_route == 'Split':
     time.sleep(2)
     story_route = multiChoice('You have the Thief in your hands. You have control. What do you do?\n(1)Arrest him.\n(2)Kill him.\n(3)Let him go.')
@@ -253,9 +263,9 @@ if story_route == 'Split':
         print('The Thief tells you of his troubles at home. He needs to pay bills and put food on the table, yet he has no job; no one will hire him. He was going to pawn the TV for grocery money. You sympathize with him and let him go.')
         story_route = 'Shoplifter'
 
-gangster  = Character('Gangster',12,12,4,15,5)
-burglar = Character('Burglar', 14, 14, 3, 10, 10)
-loss_prevention_officer = Character('Loss Prevention Officer',15,15,5,15,1)
+gangster  = Character('the Gangster',12,12,4,15,5)
+burglar = Character('the Burglar', 14, 14, 3, 10, 10)
+loss_prevention_officer = Character('the Loss Prevention Officer',15,15,5,15,1)
 
 if story_route == 'Armed Guard':
     time.sleep(2)
@@ -285,7 +295,7 @@ elif story_route == 'Vigilante':
     time.sleep(1)
     print('You are on the prowl in the sprawling cityscape of downtown when you see him... just your man.')
     time.sleep(2)
-    battle_sequence_lifesteal(burglar)
+    battle_sequence_lifesteal(burglar, 2)
     time.sleep(1)
     print('"Fantastic work," you say to yourself. You have defeated the Burglar... You drain the remaining life out of him. You feel... accomplished.')
     player_character.healUp((player_character.Max_HP - player_character.HP))
@@ -313,3 +323,67 @@ elif story_route == 'Shoplifter':
     player_character.showStats()
     story_route = 'Kleptomaniac'
     
+#fourth act
+    
+terrorist  = Character('Al-Fred the Terrorist', 25, 25, 5, 5, 5)
+lawyer = Character('State Prosecutor Ed G.', 25, 25, 5, 10, 1)
+detective = Character('Detective Komicks', 32, 32, 6, 10, 1)
+
+time.sleep(2)
+if story_route == 'Mercenary':
+    time.sleep(2)
+    print('After that, you realize that you might be destined for more!')
+    time.sleep(2)
+    print('You sign up to be an overseas static guard with a private military contractor out in the East. You receive Level IV Armor and a carbine.')
+    player_character.promoteUp(20, 20, 7, 15, 0)
+    player_character.showStats()
+    time.sleep(1)
+    print('...')
+    time.sleep(2)
+    print('The desert... it\'s hot, sandy, and miserable. It\'s been 10 months. 2 more and you get to go home.')
+    time.sleep(1)
+    print('There he is... the reason you\'re there. A terrorist appears over the horizon and he\'s coming at your base!')
+    time.sleep(2)
+    battle_sequence(terrorist, 3)
+    time.sleep(1)
+    print(f'\nYou\'ve done it. You saved the day once again. You\'re a God-damned hero, {player_character.name}.')
+    time.sleep(1)
+    print(f'You got the {story_route} ending!')
+    quit()
+    
+elif story_route == 'Bloodthirsty Vigilante':
+    time.sleep(2)
+    print('You hunger for more...')
+    time.sleep(2)
+    print('You have become enveloped in the bloodlust. You seek out any who dare step over the bounds of any law and hunt them to attempt to satiate your hunger. As you grow in hunger, you grow in power.')
+    player_character.promoteUp(12, 12, 8, 15, 10)
+    player_character.showStats()
+    time.sleep(2)
+    print('But the long arm of the law tolerates no vigilantes. One night, while you are watching over the city in your common citizen disguise, he sees you...')
+    time.sleep(1)
+    print('It\'s the state prosecutor! A lawyer arrives to serve you justice!')
+    time.sleep(2)
+    battle_sequence_lifesteal(lawyer, 3)
+    time.sleep(1)
+    print('\nEven the state couldn\'t stop you. With no one in your way, you head for the judge\'s head next. Who is more criminal than the man who lets them ago?')
+    print(f'You got the {story_route} ending!')
+    quit()
+    
+elif story_route == 'Kleptomaniac':
+    time.sleep(2)
+    print('Maybe there\'s no other way for you to live your life. You try therapy, but it just doesn\'t seem to work.')
+    time.sleep(2)
+    print('A bad habit becomes an addiction. You can\'t stop yourself anymore. It isn\'t about the money, it\'s about the act. You need this. You steal a gun and start to do coke.')
+    player_character.promoteUp(13, 13, 9, 25, 35)
+    player_character.showStats()
+    time.sleep(2)
+    print('It\'s a normal Tuesday for most, but it\'s another opportunity to steal for you. Mighty Shop is having a sale... but for you, it\'s time for a five-finger discount.')
+    time.sleep(1)
+    print('Just as you\'re about to leave Mighty Shop, you hear a voice yell at you from behind, "I\'ve got him!". A well-dressed man is bolting toward you!')
+    time.sleep(1)
+    battle_sequence(detective)
+    time.sleep(1)
+    print('\nYou just killed an officer. You never thought it would come to this, but here you are, a murderer.')
+    print(f'You got the {story_route} ending!')
+    quit()
+        
