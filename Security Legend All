@@ -1,7 +1,8 @@
 import random
+import time
 
 class Character():
-    def __init__(self, name, Max_HP = 6, HP = 6, ATK = 3, DODGE = 10, CRIT = 1):
+    def __init__(self, name, Max_HP = 6, HP = 6, ATK = 3, DODGE = 10, CRIT = 0):
         self.Max_HP = Max_HP
         self.name = name
         self.HP = HP
@@ -16,11 +17,14 @@ class Character():
         print(f'The {attacking_enemy.name} attacks!')
         if self.DODGE >= random.randint(0,100):
             print('The enemy missed!')
+            time.sleep(1)
         else:
             self.HP -= attacking_enemy.ATK
-            #print(f'{self.name} the {character_class} took' + str(attacking_enemy.ATK) + ' points of damage!\n')
+            print(f'{self.name} took {attacking_enemy.ATK} points of damage!\n')
+            time.sleep(1)
         if self.HP > 0:
             print(f'{self.name}\'s HP is now ' + str(self.HP))
+            time.sleep(1)
         else:
             print('Game Over')
             quit()
@@ -29,26 +33,29 @@ class Character():
         print(f'You chose to attack the {enemy.name}!')
         if enemy.DODGE >= random.randint(0,100):
             print(f'The {enemy.name} dodged! You dealt no damage!')
+            time.sleep(1)
         else:
             print(f'You hit the {enemy.name}!')
             if self.CRIT >= random.randint(0,100):
                 enemy.HP -= (self.ATK)*3
-                print('Critical hit! You dealt ' + str((self.ATK)*3) + 'points of damage!')
+                print('Critical hit! You dealt ' + str((self.ATK)*3) + ' points of damage!')
+                time.sleep(1)
             else:
                 enemy.HP -= self.ATK
             
             if enemy.HP > 0:
                 print('The enemy\'s remaining health is: ' + str(enemy.HP))
+                time.sleep(1)
             else:
                 print ('The enemy has been defeated!')
+                time.sleep(1)
 
     def showStats(self):
         print(self.name + '\'s stats are:')
-        print(f'Max HP: {self.Max_HP}')
-        print(f'HP: {self.HP}')
+        print(f'HP: {self.HP}/{self.Max_HP}')
         print(f'Attack: {self.ATK}')
-        print(f'Dodge: {self.DODGE}')
-        print(f'Critical Hit Chance: {self.CRIT}\n')
+        print(f'Dodge: {self.DODGE}/100')
+        print(f'Critical Hit: {self.CRIT}/100\n')
         
     def promoteUp(self, Max_HP, HP, ATK, DODGE, CRIT):
         self.Max_HP = Max_HP
@@ -113,23 +120,50 @@ def askPromptBool(bool_prompt):
        
 def battle_sequence(enemy_name):
     while enemy_name.HP > 0:
-        print(f'You are in battle with a(n) {enemy_name.name}!')
-        goblin.showStats()
-        battle_1 = battlePrompt('What do you want to do?')
+        print(f'You are in battle with a(n) {enemy_name.name}!\n')
+        enemy_name.showStats()
+        battle_1 = battlePrompt('What do you want to do?\n')
         if battle_1 == 'fight':
             player_character.dealDamage(enemy_name)
-            if goblin.HP > 0:
+            if enemy_name.HP > 0:
                 player_character.takeDamage(enemy_name)
+        elif battle_1 == 'aid':
+            if player_character.HP <= (player_character.Max_HP - 3):
+                player_character.healUp(3)
+                player_character.takeDamage(enemy_name)
+            else:
+                print('You are already at Max HP.\n')
+            player_character.takeDamage(enemy_name)
+        elif battle_1 == 'evade':
+            print('You evade your enemy\'s attack!\n')
+            time.sleep(1)
+            
+def battle_sequence_lifesteal(enemy_name):
+    while enemy_name.HP > 0:
+        print(f'You are in battle with a(n) {enemy_name.name}!\n')
+        enemy_name.showStats()
+        battle_1 = battlePrompt('What do you want to do?\n')
+        if battle_1 == 'fight':
+            player_character.dealDamage(enemy_name)
+            if enemy_name.HP > 0:
+                player_character.takeDamage(enemy_name)
+                time.sleep(1)
+                print(f'You try to steal some of the {enemy_name.name}\'s life force!')
+                if player_character.HP <= (player_character.Max_HP - 2):
+                    player_character.HP += 2
+                    print('You gain 2 points of HP!')
+                else:
+                    print('You have too much life force. You are unable to steal any.')
         elif battle_1 == 'aid':
             if player_character.HP < player_character.Max_HP:
                 player_character.healUp(3)
+                player_character.takeDamage(enemy_name)
             else:
-                print('You are already at Max HP.')
+                print('You are already at Max HP.\n')
             player_character.takeDamage(enemy_name)
         elif battle_1 == 'evade':
-            player_character.HP += enemy_name.ATK
-            player_character.takeDamage(enemy_name)
-            print('You evade your enemy\'s attack!')
+            print('You evade your enemy\'s attack!\n')
+            time.sleep(1)
         
 def printTitle():
     print('   _____                      _ _           _                               _ ')
@@ -159,100 +193,123 @@ while len(name_input) == 0 or not len(name_input) < 10:
 
 player_character = Character(name_input)
 
-print(f'Very well! Welcome {player_character.name}! \nYou are a newly-minted Night Watchman. As a security guard for the Advanced Security Group, you are tasked with the safety of your client, Mighty Shop, the "One Stop Shop for Mighty Things you Might Need!"')
+print(f'\nVery well! Welcome {player_character.name}! \nYou are a newly-minted Night Watchman.')
+time.sleep(1)
+print('\nAs a security guard for The Advanced Security Group, you are tasked with the safety of your client, Mighty Shop, the "One Stop Shop for Mighty Things you Might Need!"')
+time.sleep(1)
+print('\nYou begin your evening shift guarding Mighty Shop at 3:00 PM, or 1500 hours like your manager says. You punch in, get your gear on, and try to figure out how to start your day.')
 
+time.sleep(1)
 while True:
-    story_route = multiChoice('Choice 1 or choice 2?')
+    story_route = multiChoice('Do you take some initiative and \n(1)Go on patrol or\n(2)stay and monitor the cameras for a little bit?')
     if story_route == 1:
-        print('Zabadooo!')
-        route_1 = 'Patrol'
+        print('You choose to patrol. As you\'re rounding the corner of the loading docks, you spot a suspicous figure. It\'s a thief! And he has a giant TV!')
+        story_route = 'Patrol'
         break
     elif story_route == 2:
-        print('222222')
+        print('You choose to monitor the cameras. On monitor 15, you spot a suspicious figure out by the loading docks. You can\'t quite make out who he is, but he looks like a thief!')
         story_route = 'Cameras'
         break
     elif story_route == 3:
-        print('Invalid answer.')
+        print('Invalid answer for this question.')
         continue
 
 if story_route == 'Patrol':
-    print('You go on a patrol.')
+    print('He has a baseball bat. Duty calls! You feel no other response would be appropriate.')
+    thief = Character('Thief',5,5,2,10,1)
+    battle_sequence(thief)
+    print('Amazing job! First day as a Night Watchman and you already got a crook! You render first aid to yourself.')
+    player_character.healUp((player_character.Max_HP - player_character.HP))
+    player_character.showStats()
+    story_route = 'Split'
 elif story_route == 'Cameras':
-    print('You go to the console room to monitor the cameras.')
+        story_route = askPromptBool('He has a TV and is trying to load it in his car! But wait... he has a bat.\nDo you want to engage?')
+        if story_route == True:
+            print('Good on you! You pursue the criminal!')
+            story_route = 'Dock Fight'
+        elif story_route == False:
+            print('You\'re no fun. You get fired. Game over.')
+            quit()
         
+if story_route == 'Dock Fight':
+    time.sleep(1)
+    thief = Character('Thief',5,5,random.randint(1,2),10,1)
+    battle_sequence(thief)
+    print('Amazing job! First day as a Night Watchman and you already got a crook! You render first aid to yourself.')
+    player_character.healUp((player_character.Max_HP - player_character.HP))
+    player_character.showStats()
+    story_route = 'Split'
 
-#askPrompt('What do you want to do?')
+if story_route == 'Split':
+    time.sleep(2)
+    story_route = multiChoice('You have the Thief in your hands. You have control. What do you do?\n(1)Arrest him.\n(2)Kill him.\n(3)Let him go.')
+    if story_route == 1:
+        print('You choose to arrest the Thief as a lawful citizen. Due to your outstanding performance, The Advanced Security Group promotes you to Armed Guard.')
+        story_route = 'Armed Guard'
+    elif story_route == 2:
+        print('You have his life in your hands. The world would be a better place with less criminals in your mind. You take his life swiftly with a knife. You feel no remorse... only resolve to rid the world of more worthless criminals.')
+        story_route = 'Vigilante'    
+    elif story_route == 3:
+        print('The Thief tells you of his troubles at home. He needs to pay bills and put food on the table, yet he has no job; no one will hire him. He was going to pawn the TV for grocery money. You sympathize with him and let him go.')
+        story_route = 'Shoplifter'
 
-"""inputs = [1, 2, 3]
+gangster  = Character('Gangster',12,12,4,15,5)
+burglar = Character('Burglar', 14, 14, 3, 10, 10)
+loss_prevention_officer = Character('Loss Prevention Officer',15,15,5,15,1)
 
-first_input = 0
-while first_input not in inputs:
-    first_input = input('What would you like to do? \n (1)Show Stats (2)Begin Adventure (3)Exit Game')
+if story_route == 'Armed Guard':
+    time.sleep(2)
+    print('With your new position as an Armed Guard, you receive new gear and a new post! As an armed guard, you receive a Level III armored vest and a 9mm handgun!')
+    player_character.promoteUp(14, 14, 5, 10, 0)
+    player_character.showStats()
+    time.sleep(2)
+    print('You are now the vanguard for a high-profile lodging property, the Reilly Grand Hotel, in San Diego, CA.')
+    print('You spend the next few months taking care of business as usual, but one day, unexectedly, an offender appears!')
+    time.sleep(2)
+    battle_sequence(gangster)
+    time.sleep(1)
+    print('Fantastic work. You have defeated the Ganster and render yourself first aid.')
+    player_character.healUp((player_character.Max_HP - player_character.HP))
+    player_character.showStats()
+    story_route = 'Mercenary'
     
-    if first_input == '1':
-        player_character.showStats()
-        first_input = 0
-        continue
-    elif first_input == '2':
-        print('Away you go, then!')
-        break
-    elif first_input == '3':
-        print('Exiting now...')
-        quit()
-
-two_input = 0
-print('You observe a dark wall of trees before you. Ahead is the Wicked Woods. Do you dare enter?')
-while two_input not in inputs:
-    two_input = input('What would you like to do? \n (1)Show Stats (2)Enter (3)Exit Game')
+elif story_route == 'Vigilante':
+    time.sleep(2)
+    print('As you strengthen your resolve and convince yourself of your new moral compass, you feel a power coursing through you...')
+    time.sleep(2)
+    print('You have become a life-stealing vigilante, the Crimson Guard. You gain the ability to steal your enemy\'s life from them!')
+    player_character.promoteUp(8, 8, 4, 15, 0)
+    player_character.showStats()
+    time.sleep(2)
+    print('With your newfound powers, you begin your hunt.')
+    time.sleep(1)
+    print('You are on the prowl in the sprawling cityscape of downtown when you see him... just your man.')
+    time.sleep(2)
+    battle_sequence_lifesteal(burglar)
+    time.sleep(1)
+    print('"Fantastic work," you say to yourself. You have defeated the Burglar... You drain the remaining life out of him. You feel... accomplished.')
+    player_character.healUp((player_character.Max_HP - player_character.HP))
+    player_character.showStats()
+    story_route = 'Bloodthirsty Vigilante'
     
-    if two_input == '1':
-        player_character.showStats()
-        two_input = 0
-        continue
-    elif two_input == '2':
-        print('Very well! You enter the woods...')
-        break
-    elif two_input == '3':
-        print('Exiting now...')
-        quit() 
-        
-print('OH MOTHER OF LORD! I mean... a monster appears before you. What shall you do?')
-goblin.showStats
-
-three_input = 0
-while three_input not in inputs:
-    three_input = input('What would you like to do? \n (1)Show Stats (2)Fight (3)Flee')
+elif story_route == 'Shoplifter':
+    time.sleep(2)
+    print('After you let him go, you begin to question your own morals. The turmoil proves to be brief as within hours, you are fired for letting a criminal go.')
+    time.sleep(1)
+    print('With no job, you turn to a life of crime as well. You become a shoplifter, no better than the man you just beat.')
+    print('You hope to not hurt anyone, but you carry a pocket knife for your own safety, and gain a critical hit bonus of 15%. As a criminal, you must remain evasive, so you gain a 20% dodge chance.')
+    player_character.promoteUp(11, 11, 7, 20, 15)
+    player_character.showStats()
+    time.sleep(2)
+    print('After a few weeks, it comes easy to you. It\'s almost a cake walk, really.')
+    print('On one unfortunate day, you\'re caught in a chase with a Loss Prevention Officer and soon find yourself in a dead end.')
+    time.sleep(2)
+    battle_sequence(loss_prevention_officer)
+    time.sleep(1)
+    print('You make it out without too much trouble. "Maybe he\'s okay. I had to hurt him..." you think to yourself. There\'s no turning back now... not after that.')
+    time.sleep(1)
+    print('You limp over to a free clinic in your neighborhood and try to get some care.')
+    player_character.healUp((player_character.Max_HP - player_character.HP))
+    player_character.showStats()
+    story_route = 'Kleptomaniac'
     
-    if three_input == '1':
-        player_character.showStats()
-        three_input = 0
-        continue
-    elif three_input == '2':
-        print('Very well! You choose to fight.')
-        print('Enemy before you: ')
-        goblin.showStats()
-        break
-    elif three_input == '3':
-        print('You flee out of the forest. How pitiful. No more exploration for you, then. Game over.')
-        quit() 
-        
-four_input = 0
-while four_input not in inputs:
-    four_input = input('What would you like to do? \n (1)Show Stats (2)Attack (3)Flee')
-    
-    if four_input == '1':
-        player_character.showStats()
-        four_input = 0
-        continue
-    elif four_input == '2':
-        print('You attack the bastard Goblin! The Goblin Goon strikes back!')
-        player_character.dealDamage(goblin)
-        goblin.dealDamage(player_character)
-        player_character.showStats()
-        goblin.showStats()
-        if goblin.HP <= 0:
-            print('The Goblin has been slain!')
-        break
-    elif four_input == '3':
-        print('You flee from the goblin and run into a bear trap. The monster finds you and eats you. Game over.')
-        quit() """
