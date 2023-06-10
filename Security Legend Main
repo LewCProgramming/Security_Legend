@@ -135,7 +135,7 @@ def battle_sequence(enemy_name):
                 player_character.takeDamage(enemy_name)
             else:
                 print('You are already at Max HP.\n')
-            player_character.takeDamage(enemy_name)
+                player_character.takeDamage(enemy_name)
         elif battle_1 == 'evade':
             print('You evade your enemy\'s attack!\n')
             time.sleep(1)
@@ -344,11 +344,12 @@ if story_route == 'Mercenary':
     time.sleep(1)
     print('There he is... the reason you\'re there. A terrorist appears over the horizon and he\'s coming at your base!')
     time.sleep(2)
-    battle_sequence(terrorist, 3)
+    battle_sequence(terrorist)
     time.sleep(1)
     print(f'\nYou\'ve done it. You saved the day once again. You\'re a God-damned hero, {player_character.name}.')
     time.sleep(1)
     print(f'You got the {story_route} ending!')
+    printTitle()
     quit()
     
 elif story_route == 'Bloodthirsty Vigilante':
@@ -367,6 +368,7 @@ elif story_route == 'Bloodthirsty Vigilante':
     time.sleep(1)
     print('\nEven the state couldn\'t stop you. With no one in your way, you head for the judge\'s head next. Who is more criminal than the man who lets them ago?')
     print(f'You got the {story_route} ending!')
+    printTitle()
     quit()
     
 elif story_route == 'Kleptomaniac':
@@ -385,5 +387,6 @@ elif story_route == 'Kleptomaniac':
     time.sleep(1)
     print('\nYou just killed an officer. You never thought it would come to this, but here you are, a murderer.')
     print(f'You got the {story_route} ending!')
+    printTitle()
     quit()
         
