@@ -1,7 +1,8 @@
 import random
 
 class Character():
-    def __init__(self, name, HP = 6, ATK = 3, DODGE = 10, CRIT = 1):
+    def __init__(self, name, Max_HP = 6, HP = 6, ATK = 3, DODGE = 10, CRIT = 1):
+        self.Max_HP = Max_HP
         self.name = name
         self.HP = HP
         self.ATK = ATK
@@ -42,10 +43,20 @@ class Character():
                 print ('The enemy has been defeated!')
 
     def showStats(self):
-        print(self.name + '\'s stats: ')
-        print("HP: " + str(self.HP))
-        print("ATK: " + str(self.ATK))
-
+        print(self.name + '\'s stats are:')
+        print(f'Max HP: {self.Max_HP}')
+        print(f'HP: {self.HP}')
+        print(f'Attack: {self.ATK}')
+        print(f'Dodge: {self.DODGE}')
+        print(f'Critical Hit Chance: {self.CRIT}\n')
+        
+    def promoteUp(self, Max_HP, HP, ATK, DODGE, CRIT):
+        self.Max_HP = Max_HP
+        self.HP = HP
+        self.ATK = ATK
+        self.DODGE = DODGE
+        self.CRIT = CRIT
+        
 
 def multiChoice(choices_prompt):
     answers = ['Help', 'Stats', 'Quit', '1', '2', '3']
@@ -70,7 +81,7 @@ def multiChoice(choices_prompt):
     #key to next event
 
 def battlePrompt(fight_prompt):
-    answers = ['Help', 'Stats', 'Quit', 'Fight', 'First Aid', 'Evade']
+    answers = ['Help', 'Stats', 'Quit', 'Fight', 'Aid', 'Evade']
     prompt_answer = input(fight_prompt + '\n')
     while prompt_answer.capitalize() not in answers:
         print('Invalid response. Type \'help\' for valid responses.')
@@ -82,6 +93,12 @@ def battlePrompt(fight_prompt):
     elif prompt_answer.lower() == 'quit':
         print('Exiting Game...')
         quit()
+    elif prompt_answer.lower() == 'fight':
+        return 'fight'
+    elif prompt_answer.lower() == 'aid':
+        return 'aid'
+    elif prompt_answer.lower() == 'evade':
+        return 'evade'
     
 def askPromptBool(bool_prompt):
     bool_answers = ['Yes', 'No']
@@ -92,7 +109,27 @@ def askPromptBool(bool_prompt):
     if bool_prompt_answer.lower() == 'yes':
        return True
     elif bool_prompt_answer.lower() == 'no':
-       return False  
+       return False
+       
+def battle_sequence(enemy_name):
+    while enemy_name.HP > 0:
+        print(f'You are in battle with a(n) {enemy_name.name}!')
+        goblin.showStats()
+        battle_1 = battlePrompt('What do you want to do?')
+        if battle_1 == 'fight':
+            player_character.dealDamage(enemy_name)
+            if goblin.HP > 0:
+                player_character.takeDamage(enemy_name)
+        elif battle_1 == 'aid':
+            if player_character.HP < player_character.Max_HP:
+                player_character.healUp(3)
+            else:
+                print('You are already at Max HP.')
+            player_character.takeDamage(enemy_name)
+        elif battle_1 == 'evade':
+            player_character.HP += enemy_name.ATK
+            player_character.takeDamage(enemy_name)
+            print('You evade your enemy\'s attack!')
         
 def printTitle():
     print('   _____                      _ _           _                               _ ')
@@ -120,18 +157,29 @@ name_input = input('\nEnter your character\'s name! You have a maximum of 10 cha
 while len(name_input) == 0 or not len(name_input) < 10:
     name_input = input('Your character\'s name has to be something and has to be 10 characters or less! Try again: \n')
 
-#print('Select your class!')
-#Knight(Tank - Health/Defense) -> Armored Knight
-#Mage(Magic - Utility/Range) -> Great Mage
-#Warrior(Range - Damage/Armor Penetration) -> Weapons Saint
-
-#Enemies:
-#Thief(Attacks First)
-#Mercenary(Strong)
-#Hunter(Ranged)
-
-
 player_character = Character(name_input)
+
+print(f'Very well! Welcome {player_character.name}! \nYou are a newly-minted Night Watchman. As a security guard for the Advanced Security Group, you are tasked with the safety of your client, Mighty Shop, the "One Stop Shop for Mighty Things you Might Need!"')
+
+while True:
+    story_route = multiChoice('Choice 1 or choice 2?')
+    if story_route == 1:
+        print('Zabadooo!')
+        route_1 = 'Patrol'
+        break
+    elif story_route == 2:
+        print('222222')
+        story_route = 'Cameras'
+        break
+    elif story_route == 3:
+        print('Invalid answer.')
+        continue
+
+if story_route == 'Patrol':
+    print('You go on a patrol.')
+elif story_route == 'Cameras':
+    print('You go to the console room to monitor the cameras.')
+        
 
 #askPrompt('What do you want to do?')
 
