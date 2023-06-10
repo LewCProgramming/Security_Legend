@@ -325,8 +325,8 @@ elif story_route == 'Shoplifter':
     
 #fourth act
     
-terrorist  = Character('Al-Fred the Terrorist', 25, 25, 5, 5, 5)
-lawyer = Character('State Prosecutor Ed G.', 25, 25, 5, 10, 1)
+terrorist  = Character('Al-Fred the Terrorist', 22, 22, 6, 5, 5)
+lawyer = Character('State Prosecutor Ed G.', 24, 24, 5, 10, 1)
 detective = Character('Detective Komicks', 32, 32, 6, 10, 1)
 
 time.sleep(2)
@@ -335,7 +335,7 @@ if story_route == 'Mercenary':
     print('After that, you realize that you might be destined for more!')
     time.sleep(2)
     print('You sign up to be an overseas static guard with a private military contractor out in the East. You receive Level IV Armor and a carbine.')
-    player_character.promoteUp(20, 20, 7, 15, 0)
+    player_character.promoteUp(21, 21, 7, 15, 0)
     player_character.showStats()
     time.sleep(1)
     print('...')
