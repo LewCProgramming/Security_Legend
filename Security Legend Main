@@ -11,6 +11,7 @@ class Character():
         self.CRIT = CRIT
     
     def healUp(self, any_heal):
+        print(f'{self.name} heals for {any_heal}.')
         self.HP += any_heal
 
     def takeDamage(self, attacking_enemy):
