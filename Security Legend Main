@@ -147,12 +147,13 @@ def battle_sequence_lifesteal(enemy_name, lifesteal_value):
         battle_1 = battlePrompt('What do you want to do?\n')
         if battle_1 == 'fight':
             fight = player_character.dealDamage(enemy_name)
-            print(f'You try to steal some of the {enemy_name.name}\'s life force!')
             if fight == 1:
                 if player_character.HP <= (player_character.Max_HP - 2):
+                    print(f'You try to steal some of the {enemy_name.name}\'s life force!')
                     player_character.HP += lifesteal_value
                     print(f'You gain {lifesteal_value} points of HP!')
                 else:
+                    print(f'You try to steal some of the {enemy_name.name}\'s life force!')
                     print('You have too much life force. You are unable to steal any.')
             if enemy_name.HP > 0:
                 player_character.takeDamage(enemy_name)
